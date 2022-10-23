@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    username: root
+    password: Li1132887706.
+    url: jdbc:mysql://localhost:3306/nocv?useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8&allowPublicKeyRetrieval=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
