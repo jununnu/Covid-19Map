@@ -14,10 +14,11 @@
 </head>
 
 <body>
-  <div th:fragment="menu" class="layui-layout layui-layout-admin">
+<div th:fragment="menu">
+  <div  class="layui-layout layui-layout-admin">
 
     <div class="layui-header">
-      <div class="layui-logo layui-hide-xs layui-bg-black">^_^</div>
+      <div class="layui-logo layui-hide-xs layui-bg-black">疫情地图数据</div>
       <!-- 头部区域（可配合layui 已有的水平导航） -->
       <ul class="layui-nav layui-layout-left">
         <!-- 移动端显示 -->
@@ -71,12 +72,17 @@
               <dd><a href="/toGlobal">全球疫情图</a></dd>
             </dl>
           </li>
-          <li class="layui-nav-item">
+          <li class="layui-nav-item layui-nav-itemed">
             <a href="javascript:;">疫情数据管理</a>
             <dl class="layui-nav-child">
               <dd><a href="/toChinaManager">中国疫情数据管理</a></dd>
-              <dd><a href="javascript:;">list 2</a></dd>
-              <dd><a href="">超链接</a></dd>
+            </dl>
+          </li>
+          </li>
+          <li class="layui-nav-item layui-nav-itemed">
+            <a href="javascript:;">健康打卡管理</a>
+            <dl class="layui-nav-child">
+              <dd><a href="/toHealthClock">健康打卡</a></dd>
             </dl>
           </li>
           <li class="layui-nav-item"><a href="javascript:;">click menu item</a></li>
@@ -126,5 +132,6 @@
 
     });
   </script>
+</div>
 </body>
 </html>

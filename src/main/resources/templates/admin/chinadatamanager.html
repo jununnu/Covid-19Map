@@ -1,21 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <script src="/echarts/jquery-1.11.1.min.js"></script>
-
-    <!-- 引入 layui.css -->
-    <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
-    <!-- 引入 layui.js -->
-    <script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+    <script th:src="@{/echarts/jquery-1.11.1.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
     <style>
         body{margin: 10px;}
         .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
     </style>
 </head>
-<body>
-<!--<div th:include="commonmenu::menu"></div>-->
+<body class="childrenBody">
 <!--模态窗-->
 <div id= "addOrUpdateDiv" style="display: none;padding: 10px;padding-right: 5%">
     <form action="" method="post" id="searchFrm2" lay-filter="searchFrm2" class="layui-form">
@@ -45,8 +41,9 @@
     </form>
 </div>
 
-
-<div>
+<!--layui公共模块-->
+<div th:include="commonmenu :: menu"></div>
+<div class="layui-body">
 
 
     <!-- 内容主体区域 -->
@@ -174,17 +171,17 @@
                     // 调出弹窗
                     openAddLayer();
                     break;
-                case 'update':
-                    // 调出弹窗,加载一次数据  1.回显数据
-                    openAddLayer(data);
-                    break;
-                case 'delete':
-                    if(data.length === 0){
-                        layer.msg('请选择一行');
-                    } else {
-                        layer.msg('删除');
-                    }
-                    break;
+                 case 'update':
+                     // 调出弹窗,加载一次数据  1.回显数据
+                     openAddLayer(data);
+                     break;
+                 case 'delete':
+                     if(data.length === 0){
+                         layer.msg('请选择一行');
+                     } else {
+                         layer.msg('删除');
+                     }
+                     break;
             };
         });
 
