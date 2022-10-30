@@ -1,19 +1,22 @@
 package com.example.covid19map.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.covid19map.entity.ChinaTotal;
 import com.example.covid19map.entity.GlobalData;
 import com.example.covid19map.entity.LineTrend;
 import com.example.covid19map.entity.NocvData;
+import com.example.covid19map.service.ChinaTotalService;
 import com.example.covid19map.service.GlobalService;
 import com.example.covid19map.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author Jun
@@ -27,7 +30,28 @@ public class IndexController {
     IndexService indexService;
     @Autowired
     GlobalService globalService;
+    @Autowired
+    private ChinaTotalService chinaTotalService;
 
+    @RequestMapping("/")
+    public String newindex(Model model) throws ParseException {
+//        // 通过id倒序查询日期
+//        QueryWrapper<ChinaTotal> queryWrapper = new QueryWrapper<>();
+//        // Date函数带毫秒值，所以要改格式
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//        Date date = format.parse(String.valueOf(new Date()));
+//        queryWrapper.eq("update_time", date);
+//        queryWrapper.orderByDesc("id");
+//
+//        List<ChinaTotal> list = chinaTotalService.list(queryWrapper);
+//        ChinaTotal chinaTotal = list.get(0);
+        // 找到ID最大的一条数据
+        Integer id = chinaTotalService.maxID();
+        // 根据ID进行数据查找
+        ChinaTotal chinaTotal = chinaTotalService.getById(id);
+        model.addAttribute("chinaTotal", chinaTotal);
+        return "index";
+    }
     @RequestMapping("/index")
     public String index(){
         return "index";

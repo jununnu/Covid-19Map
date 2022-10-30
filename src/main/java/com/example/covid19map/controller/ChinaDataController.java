@@ -7,9 +7,6 @@ import com.example.covid19map.entity.NocvData;
 import com.example.covid19map.service.IndexService;
 import com.example.covid19map.vo.DataView;
 import com.example.covid19map.vo.NocvDataVo;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -21,10 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,11 +164,6 @@ public class ChinaDataController {
         os.flush();
         //  5.关闭文件流
         os.close();
-
-
-
-
-
     }
 
 }
