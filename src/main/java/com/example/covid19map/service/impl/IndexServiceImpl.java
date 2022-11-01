@@ -28,4 +28,9 @@ public class IndexServiceImpl extends ServiceImpl<IndexMapper, NocvData> impleme
         List<LineTrend> list = indexMapper.findWeekData();
         return list;
     }
+
+    @Override
+    public List<NocvData> listOrderByIdLimit34() {
+        return indexMapper.listOrderByIdLimit34();
+    }
 }

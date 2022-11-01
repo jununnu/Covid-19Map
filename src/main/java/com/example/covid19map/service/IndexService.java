@@ -17,4 +17,6 @@ import java.util.List;
 public interface IndexService extends IService<NocvData> {
 
     List<LineTrend> findWeekData();
+
+    List<NocvData> listOrderByIdLimit34();
 }

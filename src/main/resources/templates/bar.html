@@ -19,7 +19,6 @@
 <div th:include="commonmenu::menu">
 
 </div>
-    <div id="main" style="width: 600px;height:500px;"></div>
     <script type="text/javascript">
         var myChart = echarts.init(document.getElementById('main'));
         var dataList = [];
@@ -60,6 +59,5 @@
         });
         myChart.setOption(option);
     </script>
-</div>
 </body>
 </html>

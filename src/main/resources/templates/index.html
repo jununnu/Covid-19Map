@@ -22,7 +22,7 @@
 <div class="layui-body">
     <div style="padding-top: 50px">
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-            <legend>新冠肺炎实时疫情数据展示--截止统计时间：<span th:text="${#dates.format(chinaTotal.updateTime, 'yyyy-MM-dd HH:ss')}"></span></legend>
+            <legend>新冠肺炎实时疫情数据展示--截止统计时间：<span th:text="${#dates.format(chinaTotal.updateTime, 'yyyy-MM-dd HH:mm')}"></span></legend>
         </fieldset>
 
         <div class="layui-btn-container">
@@ -34,7 +34,6 @@
 <!--            <button type="button" class="layui-btn layui-btn-disabled" th:text="'确诊人数'+${chinaTotal.confirm}">禁用按钮</button>-->
         </div>
     </div>
-    <div id="main" style="width: 900px;height:700px;"></div>
     <script type="text/javascript">
 
         var myChart = echarts.init(document.getElementById('main'));

@@ -52,16 +52,23 @@ public class IndexController {
         model.addAttribute("chinaTotal", chinaTotal);
         return "index";
     }
-    @RequestMapping("/index")
-    public String index(){
-        return "index";
-    }
+//    @RequestMapping("/index")
+//    public String index(){
+//        return "index";
+//    }
 
     @RequestMapping("/query")
     @ResponseBody
-    public List<NocvData> queryData(){
-        List<NocvData> nocvData = indexService.list();
-        System.out.println(nocvData);
+    public List<NocvData> queryData() throws ParseException {
+//        // 查询当天业务逻辑
+//        QueryWrapper<NocvData> queryWrapper = new QueryWrapper<>();
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//        String format1 = format.format(new Date());
+//        // 大于当天时间
+//        queryWrapper.ge("update_time", format.parse(format1));
+//        List<NocvData> nocvData = indexService.list(queryWrapper);
+
+        List<NocvData> nocvData = indexService.listOrderByIdLimit34();
         return nocvData;
     }
 
@@ -73,7 +80,7 @@ public class IndexController {
     @RequestMapping("/queryPie")
     @ResponseBody
     public List<NocvData> queryDataPie(){
-        List<NocvData> list = indexService.list();
+        List<NocvData> list = indexService.listOrderByIdLimit34();
         System.out.println(list);
         return list;
     }
@@ -88,7 +95,7 @@ public class IndexController {
 //    因为需要分x和y坐标数据，一个list不行，就用map； 第一个String是map的键名，第二个是map的值，用Obj可以写两种
     public Map<String, List<Object>> queryDataBar(){
 //        所有城市数据：数值
-        List<NocvData> list = indexService.list();
+        List<NocvData> list = indexService.listOrderByIdLimit34();
 //        所有城市数据
         List<String> cityList = new ArrayList<>();
         for (NocvData data : list) {

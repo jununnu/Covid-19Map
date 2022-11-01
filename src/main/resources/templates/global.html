@@ -20,7 +20,7 @@
 <div th:include="commonmenu::menu">
 
 </div>
-<div id="main" style="width: 900px;height:700px;"></div>
+<div id="main" style="width: 900px;height:700px;">
 <script type="text/javascript">
   var myChart = echarts.init(document.getElementById('main'));
   var dataList = [];
@@ -89,6 +89,7 @@
   });
   myChart.setOption(option);
 </script>
+</div>
 </div>
 </body>
 </html>

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author Jun
  * @date 2022/10/12 17:58
@@ -18,4 +20,6 @@ public class NocvData {
     private Integer id;
     private String name;
     private Integer value;
+
+    private Date updateTime;
 }
