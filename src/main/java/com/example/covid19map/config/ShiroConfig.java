@@ -43,7 +43,7 @@ public class ShiroConfig {
 
     private String[] anonUrls; // 放行的路径
     private String logOutUrl; // 登出的地址
-    private String[] authcUlrs; // 拦截的路径
+    private String[] authcUrls; // 拦截的路径
 
     /**
      * 声明凭证匹配器
@@ -99,8 +99,8 @@ public class ShiroConfig {
             filterChainDefinitionMap.put(logOutUrl, "logout");
         }
         // 设置拦截的路径
-        if (authcUlrs != null && authcUlrs.length > 0) {
-            for (String authc : authcUlrs) {
+        if (authcUrls != null && authcUrls.length > 0) {
+            for (String authc : authcUrls) {
                 filterChainDefinitionMap.put(authc, "authc");
             }
         }

@@ -28,7 +28,6 @@ public class User {
     private String card;
 
     //作为外键使用
-    private Integer roleId;
     private Integer banJiId;
     private Integer xueYuanId;
     private Integer teacherId;

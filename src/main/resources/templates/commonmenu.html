@@ -49,7 +49,7 @@
           <dl class="layui-nav-child">
             <dd><a href="">Your Profile</a></dd>
             <dd><a href="">Settings</a></dd>
-            <dd><a href="">Sign out</a></dd>
+            <dd><a th:href="@{/login/logout}">Sign out</a></dd>
           </dl>
         </li>
         <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
@@ -84,7 +84,14 @@
           <li class="layui-nav-item layui-nav-itemed">
             <a href="javascript:;">健康打卡管理</a>
             <dl class="layui-nav-child">
-              <dd><a href="/toHealthClock">健康打卡</a></dd>
+              <dd><a href="/toHealthClock">健康打卡记录</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item layui-nav-itemed">
+            <a href="javascript:;">系统管理</a>
+            <dl class="layui-nav-child">
+              <dd><a href="/menu/toMenu">菜单管理</a></dd>
+              <dd><a href="/toHealthClock">菜单管理</a></dd>
             </dl>
           </li>
           <li class="layui-nav-item"><a href="javascript:;">click menu item</a></li>

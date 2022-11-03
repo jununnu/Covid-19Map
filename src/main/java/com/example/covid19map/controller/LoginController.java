@@ -2,9 +2,13 @@ package com.example.covid19map.controller;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
+import cn.hutool.crypto.SecureUtil;
 import com.example.covid19map.entity.User;
 import com.example.covid19map.service.UserService;
 import com.example.covid19map.vo.DataView;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +60,14 @@ public class LoginController {
         String sessionCode = session.getAttribute("code").toString();
         if (code!=null && sessionCode.equals(code)) {
             // 登陆逻辑
-            User user = userService.login(username, password);
+//            普通登录
+//            User user = userService.login(username, password);
+//            shiro登陆
+            Subject subject = SecurityUtils.getSubject();
+            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+            subject.login(token);
+            User user = (User) subject.getPrincipal();
+
             if (user!=null) {
                 dataView.setCode(200);
                 dataView.setMsg("登录成功！");
@@ -72,5 +83,12 @@ public class LoginController {
         dataView.setCode(100);
         dataView.setMsg("验证码错误，登录失败！");
         return dataView;
+    }
+
+    @RequestMapping("/login/logout")
+    public String logout(){
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return "login";
     }
 }
