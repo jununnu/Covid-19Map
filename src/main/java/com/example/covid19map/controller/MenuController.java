@@ -92,4 +92,42 @@ public class MenuController {
         dataView.setMsg("数据插入成功！");
         return dataView;
     }
+
+    // 更新菜单
+    @RequestMapping("/updateMenu")
+    @ResponseBody
+    public DataView updateMenu(Menu menu){
+        menuService.updateById(menu);
+        DataView dataView = new DataView();
+        dataView.setCode(200);
+        dataView.setMsg("更新菜单成功！");
+        return dataView;
+    }
+
+    // 删除信息前提，判断有没有子节点
+    @RequestMapping("/checkMenuHasChildrenNode")
+    @ResponseBody
+    public Map<String, Object> checkChildrenNode(Menu menu){
+        Map<String, Object> map = new HashMap<>();
+        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("pid", menu.getPid());
+        List<Menu> list = menuService.list(queryWrapper);
+        if (list.size()>0) {
+            map.put("value", "true");
+        }else{
+            map.put("value", "false");
+        }
+        return map;
+    }
+
+    // 删除信息
+    @RequestMapping("/deleteMenu")
+    @ResponseBody
+    public DataView deleteMenu(Menu menu){
+        menuService.removeById(menu.getId());
+        DataView dataView = new DataView();
+        dataView.setCode(200);
+        dataView.setMsg("删除菜单成功！");
+        return dataView;
+    }
 }
