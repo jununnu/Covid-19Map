@@ -33,8 +33,8 @@ public class IndexController {
     @Autowired
     private ChinaTotalService chinaTotalService;
 
-    @RequestMapping("/")
-    public String newindex(Model model) throws ParseException {
+    @RequestMapping("/toChina")
+    public String toChina(Model model) throws ParseException {
 //        // 通过id倒序查询日期
 //        QueryWrapper<ChinaTotal> queryWrapper = new QueryWrapper<>();
 //        // Date函数带毫秒值，所以要改格式
@@ -48,6 +48,14 @@ public class IndexController {
         // 找到ID最大的一条数据
         Integer id = chinaTotalService.maxID();
         // 根据ID进行数据查找
+        ChinaTotal chinaTotal = chinaTotalService.getById(id);
+        model.addAttribute("chinaTotal", chinaTotal);
+        return "china";
+    }
+
+    @RequestMapping("/")
+    public String index(Model model) throws ParseException{
+        Integer id = chinaTotalService.maxID();
         ChinaTotal chinaTotal = chinaTotalService.getById(id);
         model.addAttribute("chinaTotal", chinaTotal);
         return "index";
