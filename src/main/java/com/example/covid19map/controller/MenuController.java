@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.covid19map.entity.Menu;
 import com.example.covid19map.service.MenuService;
 import com.example.covid19map.util.TreeNode;
+import com.example.covid19map.util.TreeNodeBuilder;
 import com.example.covid19map.vo.DataView;
 import com.example.covid19map.vo.MenuVo;
 import org.apache.commons.lang3.StringUtils;
@@ -129,5 +130,25 @@ public class MenuController {
         dataView.setCode(200);
         dataView.setMsg("删除菜单成功！");
         return dataView;
+    }
+
+    // 首页左侧层级展示
+    @RequestMapping("/loadIndexLeftMenuJson")
+    @ResponseBody
+    public DataView loadIndexLeftMenuJson(Menu menu){
+        List<Menu> list = menuService.list();
+        List<TreeNode> treeNodes = new ArrayList<>();
+        for (Menu menu1 : list) {
+            Integer id = menu1.getId();
+            Integer pid = menu1.getPid();
+            String title = menu1.getTitle();
+            String icon = menu1.getIcon();
+            String href = menu1.getHref();
+            Boolean open = menu1.getOpen().equals(1)?true:false;
+            treeNodes.add(new TreeNode(id, pid, title, icon, href, open));
+        }
+        // 构造层级关系, 原先构造的treeNodes是没有层级关系的，单纯是个数组，需要用build构造成层级关系
+        List<TreeNode> nodeList = TreeNodeBuilder.build(treeNodes, 0);
+        return new DataView(nodeList);
     }
 }
