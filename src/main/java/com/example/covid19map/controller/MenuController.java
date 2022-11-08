@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.covid19map.entity.Menu;
 import com.example.covid19map.service.MenuService;
+import com.example.covid19map.service.RoleService;
 import com.example.covid19map.util.TreeNode;
 import com.example.covid19map.util.TreeNodeBuilder;
 import com.example.covid19map.vo.DataView;
 import com.example.covid19map.vo.MenuVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +35,10 @@ public class MenuController {
 
     @Autowired
     private MenuService menuService;
+
+    @Autowired
+    private RoleService roleService;
+
     @RequestMapping("/toMenu")
     private String toMenu(){
         return "/menu/menu";
@@ -151,4 +157,6 @@ public class MenuController {
         List<TreeNode> nodeList = TreeNodeBuilder.build(treeNodes, 0);
         return new DataView(nodeList);
     }
+
+
 }
