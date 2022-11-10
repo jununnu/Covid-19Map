@@ -1,6 +1,7 @@
 package com.example.covid19map.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -31,5 +32,15 @@ public class User {
     private Integer banJiId;
     private Integer xueYuanId;
     private Integer teacherId;
+
+    // 非数据库列 班级名字，学院名字，老师名字
+    @TableField(exist = false)
+    private String banJiName;
+
+    @TableField(exist = false)
+    private String xueYuanName;
+
+    @TableField(exist = false)
+    private String teacherName;
 
 }
