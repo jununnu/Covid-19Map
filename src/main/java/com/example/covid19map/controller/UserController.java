@@ -12,12 +12,16 @@ import com.example.covid19map.service.XueYuanService;
 import com.example.covid19map.vo.DataView;
 import com.example.covid19map.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.xml.crypto.Data;
+import java.util.List;
 
 /**
  * @author Jun
@@ -91,4 +95,62 @@ public class UserController {
         return new DataView(iPage.getTotal(), iPage.getRecords());
     }
 
+    /**
+     * 新增用户
+     */
+    @RequestMapping("/addUser")
+    @ResponseBody
+    public DataView addUser(User user){
+        userService.save(user);
+        DataView dataView = new DataView();
+        dataView.setMsg("添加用户成功！");
+        dataView.setCode(200);
+        return dataView;
+    }
+
+
+    /**
+     * 修改用户
+     */
+    @RequestMapping("/updateUser")
+    @ResponseBody
+    public DataView updateUser(User user){
+        userService.updateById(user);
+        DataView dataView = new DataView();
+        dataView.setMsg("修改用户成功！");
+        dataView.setCode(200);
+        return dataView;
+    }
+
+    /**
+     * 删除用户
+     */
+    @RequestMapping("/deleteUser/{id}")
+    @ResponseBody
+    public DataView deleteUser(@PathVariable("id") Integer id){
+        userService.removeById(id);
+        DataView dataView = new DataView();
+        dataView.setMsg("删除用户成功！");
+        dataView.setCode(200);
+        return dataView;
+    }
+    /**
+     * 初始化下拉班级列表
+     */
+    @RequestMapping("/listAllBanJi")
+    @ResponseBody
+    public List<BanJi> listAllBanJi(){
+        List<BanJi> list = banJiService.list();
+        return list;
+    }
+
+    /**
+     * 初始化学院下拉列表
+     */
+    @RequestMapping("/listAllXueYuan")
+    @ResponseBody
+    public List<XueYuan> listAllXueYuan(){
+        List<XueYuan> list = xueYuanService.list();
+        return list;
+    }
 }
