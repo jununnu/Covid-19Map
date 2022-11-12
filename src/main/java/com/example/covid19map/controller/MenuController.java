@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.covid19map.entity.Menu;
+import com.example.covid19map.entity.User;
 import com.example.covid19map.service.MenuService;
 import com.example.covid19map.service.RoleService;
 import com.example.covid19map.util.TreeNode;
@@ -18,11 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import javax.xml.crypto.Data;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Jun
@@ -141,8 +140,33 @@ public class MenuController {
     // 首页左侧层级展示
     @RequestMapping("/loadIndexLeftMenuJson")
     @ResponseBody
-    public DataView loadIndexLeftMenuJson(Menu menu){
-        List<Menu> list = menuService.list();
+    public DataView loadIndexLeftMenuJson(HttpSession session){
+        // 查询所有菜单栏
+        List<Menu> list = null;
+        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
+
+        // 按照条件查询
+        User user = (User) session.getAttribute("user");
+        Integer userId = user.getId();
+
+        // 根据用户id查询角色
+        List<Integer> currentUserRoleIds = roleService.queryUserRoleById(userId);
+
+        // 根据角色查询菜单权限
+        Set<Integer> mids = new HashSet<>();
+        for (Integer rid : currentUserRoleIds) {
+            // 根据角色id查询菜单id
+            List<Integer> permissionIds = roleService.queryAllPermissionByRid(rid);
+            // 菜单栏id和角色id去重
+            mids.addAll(permissionIds);
+        }
+
+        // 根据角色id查询菜单
+        if (mids.size()>0) {
+            queryWrapper.in("id", mids);
+            list = menuService.list(queryWrapper);
+        }
+        // 构造层级关系
         List<TreeNode> treeNodes = new ArrayList<>();
         for (Menu menu1 : list) {
             Integer id = menu1.getId();

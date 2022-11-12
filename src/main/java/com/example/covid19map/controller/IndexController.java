@@ -1,13 +1,11 @@
 package com.example.covid19map.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.example.covid19map.entity.ChinaTotal;
-import com.example.covid19map.entity.GlobalData;
-import com.example.covid19map.entity.LineTrend;
-import com.example.covid19map.entity.NocvData;
+import com.example.covid19map.entity.*;
 import com.example.covid19map.service.ChinaTotalService;
 import com.example.covid19map.service.GlobalService;
 import com.example.covid19map.service.IndexService;
+import com.example.covid19map.service.NocvNewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +30,8 @@ public class IndexController {
     GlobalService globalService;
     @Autowired
     private ChinaTotalService chinaTotalService;
+    @Autowired
+    private NocvNewsService nocvNewsService;
 
     @RequestMapping("/toChina")
     public String toChina(Model model) throws ParseException {
@@ -50,6 +50,9 @@ public class IndexController {
         // 根据ID进行数据查找
         ChinaTotal chinaTotal = chinaTotalService.getById(id);
         model.addAttribute("chinaTotal", chinaTotal);
+        // 疫情播报新闻
+        List<NocvNews> newsList = nocvNewsService.listNewsLimit5();
+        model.addAttribute("newsList", newsList);
         return "china";
     }
 
