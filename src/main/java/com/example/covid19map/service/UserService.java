@@ -10,4 +10,6 @@ import com.example.covid19map.entity.User;
  */
 public interface UserService extends IService<User> {
     User login(String username, String password);
+
+    void saveUserRole(Integer uid, Integer[] ids);
 }

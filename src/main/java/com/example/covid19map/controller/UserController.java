@@ -7,6 +7,7 @@ import com.example.covid19map.entity.BanJi;
 import com.example.covid19map.entity.User;
 import com.example.covid19map.entity.XueYuan;
 import com.example.covid19map.service.BanJiService;
+import com.example.covid19map.service.RoleService;
 import com.example.covid19map.service.UserService;
 import com.example.covid19map.service.XueYuanService;
 import com.example.covid19map.vo.DataView;
@@ -19,9 +20,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yaml.snakeyaml.events.Event;
 
+import javax.lang.model.element.VariableElement;
 import javax.xml.crypto.Data;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Jun
@@ -41,25 +45,28 @@ public class UserController {
     @Autowired
     private XueYuanService xueYuanService;
 
+    @Autowired
+    private RoleService roleService;
+
     @RequestMapping("/toUser")
-    public String toUser(){
+    public String toUser() {
         return "user/user";
     }
 
     @RequestMapping("/toChangePassword")
-    public String toChangePassword(){
+    public String toChangePassword() {
         return "user/changepassword";
     }
 
     @RequestMapping("/toUserInfo")
-    public String toUserInfo(){
+    public String toUserInfo() {
         return "user/userInfo";
     }
 
     // 分页查询所有数据
     @RequestMapping("/loadAllUser")
     @ResponseBody
-    public DataView getAllUser(UserVo userVo){
+    public DataView getAllUser(UserVo userVo) {
         // 第一种方法
 //        if (StringUtils.isNotBlank(userVo.getUsername())) {
 //            userService.loadUserByLeftJoin(userVo.getUsername(), userVo.getPage(), userVo.getLimit());
@@ -75,18 +82,18 @@ public class UserController {
 
         for (User user : iPage.getRecords()) {
             // 为班级名字赋值
-            if (user.getBanJiId()!=null) {
+            if (user.getBanJiId() != null) {
                 // 班级查库
                 BanJi banJi = banJiService.getById(user.getBanJiId());
                 user.setBanJiName(banJi.getName());
             }
             // 为学院名字赋值
-            if (user.getXueYuanId()!=null) {
+            if (user.getXueYuanId() != null) {
                 XueYuan xueYuan = xueYuanService.getById(user.getXueYuanId());
                 user.setXueYuanName(xueYuan.getName());
             }
             // 为老师名字赋值
-            if (user.getTeacherId()!=null) {
+            if (user.getTeacherId() != null) {
                 User teacher = userService.getById(user.getTeacherId());
                 user.setTeacherName(teacher.getUsername());
             }
@@ -100,7 +107,7 @@ public class UserController {
      */
     @RequestMapping("/addUser")
     @ResponseBody
-    public DataView addUser(User user){
+    public DataView addUser(User user) {
         userService.save(user);
         DataView dataView = new DataView();
         dataView.setMsg("添加用户成功！");
@@ -114,7 +121,7 @@ public class UserController {
      */
     @RequestMapping("/updateUser")
     @ResponseBody
-    public DataView updateUser(User user){
+    public DataView updateUser(User user) {
         userService.updateById(user);
         DataView dataView = new DataView();
         dataView.setMsg("修改用户成功！");
@@ -127,19 +134,20 @@ public class UserController {
      */
     @RequestMapping("/deleteUser/{id}")
     @ResponseBody
-    public DataView deleteUser(@PathVariable("id") Integer id){
+    public DataView deleteUser(@PathVariable("id") Integer id) {
         userService.removeById(id);
         DataView dataView = new DataView();
         dataView.setMsg("删除用户成功！");
         dataView.setCode(200);
         return dataView;
     }
+
     /**
      * 初始化下拉班级列表
      */
     @RequestMapping("/listAllBanJi")
     @ResponseBody
-    public List<BanJi> listAllBanJi(){
+    public List<BanJi> listAllBanJi() {
         List<BanJi> list = banJiService.list();
         return list;
     }
@@ -149,8 +157,63 @@ public class UserController {
      */
     @RequestMapping("/listAllXueYuan")
     @ResponseBody
-    public List<XueYuan> listAllXueYuan(){
+    public List<XueYuan> listAllXueYuan() {
         List<XueYuan> list = xueYuanService.list();
         return list;
+    }
+
+
+    /**
+     * 删除用户
+     */
+    @RequestMapping("/resetPwd/{id}")
+    @ResponseBody
+    public DataView resetPwd(@PathVariable("id") Integer id) {
+        User user = new User();
+        user.setId(id);
+        user.setPassword("123456");
+        userService.updateById(user);
+        DataView dataView = new DataView();
+        dataView.setMsg("用户重置密码成功！");
+        dataView.setCode(200);
+        return dataView;
+    }
+
+    /**
+     * 点击分配时，初始化用户角色
+     */
+    @RequestMapping("/initRoleByUserId")
+    @ResponseBody
+    public DataView initRoleByUserId(Integer id){
+        // 查询角色
+        List<Map<String, Object>> maps = roleService.listMaps();
+        // 查询当前登录用户所拥有的角色,根据uid查询rid
+        List<Integer> currentUserRoleIds = roleService.queryUserRoleById(id);
+        // 让前端变为选中状态
+        for (Map<String, Object> map : maps) {
+            Boolean LAY_CHECKED = false;
+            Integer roleId = (Integer) map.get("id");
+            for (Integer rid : currentUserRoleIds) {
+                if (rid.equals(roleId)) {
+                    LAY_CHECKED = true;
+                    break;
+                }
+            }
+            map.put("LAY_CHECKED", LAY_CHECKED);
+        }
+        return new DataView(Long.valueOf(maps.size()), maps);
+    }
+
+    /**
+     * 保存角色分配权限,1:m
+     */
+    @RequestMapping("/saveUserRole")
+    @ResponseBody
+    public DataView saveUserRole(Integer uid, Integer[] ids){
+        userService.saveUserRole(uid, ids);
+        DataView dataView = new DataView();
+        dataView.setCode(200);
+        dataView.setMsg("角色分配成功！");
+        return dataView;
     }
 }

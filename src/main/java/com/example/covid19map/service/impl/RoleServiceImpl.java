@@ -34,4 +34,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public void saveRoleMenu(Integer rid, Integer mid) {
         roleMapper.saveRoleMenu(rid, mid);
     }
+
+    @Override
+    public List<Integer> queryUserRoleById(Integer id) {
+        return roleMapper.queryUserRoleById(id);
+    }
 }
