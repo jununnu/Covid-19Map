@@ -1,6 +1,5 @@
 package com.example.covid19map.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.covid19map.entity.*;
 import com.example.covid19map.service.ChinaTotalService;
 import com.example.covid19map.service.GlobalService;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -51,7 +49,7 @@ public class IndexController {
         ChinaTotal chinaTotal = chinaTotalService.getById(id);
         model.addAttribute("chinaTotal", chinaTotal);
         // 疫情播报新闻
-        List<NocvNews> newsList = nocvNewsService.listNewsLimit5();
+        List<NocvNews> newsList = nocvNewsService.listNewsLimit3();
         model.addAttribute("newsList", newsList);
         return "china";
     }

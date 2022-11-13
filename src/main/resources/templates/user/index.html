@@ -74,10 +74,10 @@
                 </div>
             </div>
         </div>
-        <!-- 底部 -->
-        <!--<div class="layui-footer footer">
-            <p><span>copyright @2022 Coding路人王</span><a onclick="donation()" class="layui-btn layui-btn-danger layui-btn-sm">捐赠作者</a></p>
-        </div>-->
+<!--        &lt;!&ndash; 底部 &ndash;&gt;-->
+<!--        &lt;!&ndash;<div class="layui-footer footer">-->
+<!--            <p><span>copyright @2022 Coding路人王</span><a onclick="donation()" class="layui-btn layui-btn-danger layui-btn-sm">捐赠作者</a></p>-->
+<!--        </div>&ndash;&gt;-->
     </div>
 
     <!-- 移动导航 -->
@@ -126,16 +126,16 @@
                 tab.tabMove();
             })
 
-            //隐藏左侧导航
-            $(".hideMenu").click(function(){
-                if($(".topLevelMenus li.layui-this a").data("url")){
-                    layer.msg("此栏目状态下左侧菜单不可展开");  //主要为了避免左侧显示的内容与顶部菜单不匹配
-                    return false;
-                }
-                $(".layui-layout-admin").toggleClass("showMenu");
-                //渲染顶部窗口
-                tab.tabMove();
-            })
+            // //隐藏左侧导航
+            // $(".hideMenu").click(function(){
+            //     if($(".topLevelMenus li.layui-this a").data("url")){
+            //         layer.msg("此栏目状态下左侧菜单不可展开");  //主要为了避免左侧显示的内容与顶部菜单不匹配
+            //         return false;
+            //     }
+            //     $(".layui-layout-admin").toggleClass("showMenu");
+            //     //渲染顶部窗口
+            //     tab.tabMove();
+            // })
 
             //通过顶部菜单获取左侧二三级菜单   注：此处只做演示之用，实际开发中通过接口传参的方式获取导航数据
             getData("contentManagement");

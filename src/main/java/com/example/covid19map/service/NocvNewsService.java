@@ -2,6 +2,7 @@ package com.example.covid19map.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.covid19map.entity.NocvNews;
+import com.example.covid19map.vo.XueYuanVo;
 
 import java.util.List;
 
@@ -11,5 +12,5 @@ import java.util.List;
  * @description NocvNewsService
  */
 public interface NocvNewsService extends IService<NocvNews> {
-    List<NocvNews> listNewsLimit5();
+    List<NocvNews> listNewsLimit3();
 }

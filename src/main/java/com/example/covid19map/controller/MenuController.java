@@ -149,23 +149,28 @@ public class MenuController {
         User user = (User) session.getAttribute("user");
         Integer userId = user.getId();
 
-        // 根据用户id查询角色
-        List<Integer> currentUserRoleIds = roleService.queryUserRoleById(userId);
+        if (user.getUsername().equals("admin") || StringUtils.equals(user.getUsername(),"admin")) {
+            list = menuService.list();
+        } else {
+            // 根据用户id查询角色
+            List<Integer> currentUserRoleIds = roleService.queryUserRoleById(userId);
 
-        // 根据角色查询菜单权限
-        Set<Integer> mids = new HashSet<>();
-        for (Integer rid : currentUserRoleIds) {
-            // 根据角色id查询菜单id
-            List<Integer> permissionIds = roleService.queryAllPermissionByRid(rid);
-            // 菜单栏id和角色id去重
-            mids.addAll(permissionIds);
+            // 根据角色查询菜单权限
+            Set<Integer> mids = new HashSet<>();
+            for (Integer rid : currentUserRoleIds) {
+                // 根据角色id查询菜单id
+                List<Integer> permissionIds = roleService.queryAllPermissionByRid(rid);
+                // 菜单栏id和角色id去重
+                mids.addAll(permissionIds);
+            }
+
+            // 根据角色id查询菜单
+            if (mids.size()>0) {
+                queryWrapper.in("id", mids);
+                list = menuService.list(queryWrapper);
+            }
         }
 
-        // 根据角色id查询菜单
-        if (mids.size()>0) {
-            queryWrapper.in("id", mids);
-            list = menuService.list(queryWrapper);
-        }
         // 构造层级关系
         List<TreeNode> treeNodes = new ArrayList<>();
         for (Menu menu1 : list) {

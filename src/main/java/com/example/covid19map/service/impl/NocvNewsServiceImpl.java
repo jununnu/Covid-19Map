@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.covid19map.dao.NocvNewsMapper;
 import com.example.covid19map.entity.NocvNews;
 import com.example.covid19map.service.NocvNewsService;
+import com.example.covid19map.vo.NocvNewsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class NocvNewsServiceImpl extends ServiceImpl<NocvNewsMapper, NocvNews> i
     @Autowired
     private NocvNewsMapper nocvNewsMapper;
     @Override
-    public List<NocvNews> listNewsLimit5() {
-        return nocvNewsMapper.listNewsLimit5();
+    public List<NocvNews> listNewsLimit3() {
+        return nocvNewsMapper.listNewsLimit3();
     }
 }

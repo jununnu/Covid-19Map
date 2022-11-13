@@ -12,6 +12,6 @@ import java.util.List;
  * @description NocvNewsMapper
  */
 public interface NocvNewsMapper extends BaseMapper<NocvNews> {
-    @Select("SELECT * FROM nocv_news ORDER BY create_time DESC LIMIT 5")
-    List<NocvNews> listNewsLimit5();
+    @Select("SELECT * FROM nocv_news ORDER BY create_time DESC LIMIT 3")
+    List<NocvNews> listNewsLimit3();
 }
