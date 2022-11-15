@@ -5,13 +5,16 @@ import com.example.covid19map.service.ChinaTotalService;
 import com.example.covid19map.service.GlobalService;
 import com.example.covid19map.service.IndexService;
 import com.example.covid19map.service.NocvNewsService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import redis.clients.jedis.Jedis;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -33,6 +36,7 @@ public class IndexController {
 
     @RequestMapping("/toChina")
     public String toChina(Model model) throws ParseException {
+        //第一版
 //        // 通过id倒序查询日期
 //        QueryWrapper<ChinaTotal> queryWrapper = new QueryWrapper<>();
 //        // Date函数带毫秒值，所以要改格式
@@ -44,8 +48,62 @@ public class IndexController {
 //        List<ChinaTotal> list = chinaTotalService.list(queryWrapper);
 //        ChinaTotal chinaTotal = list.get(0);
         // 找到ID最大的一条数据
+        //第二版-----------------------------------------------------------------------
         Integer id = chinaTotalService.maxID();
-        // 根据ID进行数据查找
+        // MySQL根据ID进行数据查找
+//        ChinaTotal chinaTotal = chinaTotalService.getById(id);
+//        model.addAttribute("chinaTotal", chinaTotal);
+        // redis查询数据库逻辑
+        // 查询redis缓存，有数据则直接返回；没有数据则查询MySQL数据库，更新缓存，返回客户端
+
+        Jedis jedis = new Jedis("127.0.0.1");
+        // 拿到客户端链接
+        if (jedis!=null) {
+            String confirm = jedis.get("confirm");
+            String input = jedis.get("input");
+            String heal = jedis.get("heal");
+            String dead = jedis.get("dead");
+            String updateTime = jedis.get("updateTime");
+            // 缓存里面有数据
+            if (StringUtils.isNotBlank(confirm)
+                && StringUtils.isNotBlank(input)
+                && StringUtils.isNotBlank(heal)
+                && StringUtils.isNotBlank(dead)
+                && StringUtils.isNotBlank(updateTime)
+            ){
+                ChinaTotal chinaTotalRedis = new ChinaTotal();
+                chinaTotalRedis.setConfirm(Integer.parseInt(confirm));
+                chinaTotalRedis.setInput(Integer.parseInt(input));
+                chinaTotalRedis.setHeal(Integer.parseInt(heal));
+                chinaTotalRedis.setDead(Integer.parseInt(dead));
+
+                //时间格式调整string->date，因为redis都是string格式
+//                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                Date date = format.parse(updateTime);
+                chinaTotalRedis.setUpdateTime(new Date());
+//                System.out.println("redis data:"+chinaTotalRedis);
+                // 返回前台数据
+                model.addAttribute("chinaTotal", chinaTotalRedis);
+                List<NocvNews> newsList = nocvNewsService.listNewsLimit3();
+                model.addAttribute("newsList", newsList);
+                return "china";
+            }else{
+                ChinaTotal chinaTotal = chinaTotalService.getById(id);
+                model.addAttribute("chinaTotal", chinaTotal);
+                // 疫情播报新闻
+                List<NocvNews> newsList = nocvNewsService.listNewsLimit3();
+                model.addAttribute("newsList", newsList);
+
+                // 更新缓存
+                jedis.set("confirm", String.valueOf(chinaTotal.getConfirm()));
+                jedis.set("input", String.valueOf(chinaTotal.getInput()));
+                jedis.set("heal", String.valueOf(chinaTotal.getHeal()));
+                jedis.set("dead", String.valueOf(chinaTotal.getDead()));
+                jedis.set("updateTime", String.valueOf(chinaTotal.getUpdateTime()));
+
+                return "china";
+            }
+        }
         ChinaTotal chinaTotal = chinaTotalService.getById(id);
         model.addAttribute("chinaTotal", chinaTotal);
         // 疫情播报新闻

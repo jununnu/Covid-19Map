@@ -9,6 +9,7 @@ import com.example.covid19map.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -35,7 +36,7 @@ public class ChinaTotalScheduleTask {
 //    @Scheduled(fixedDelay = 10000)
     //每天12点执行一次，更新全国疫情数据情况
     //秒 分 时 日 月 周
-    @Scheduled(cron = "0 0 12 * * ?")
+    @Scheduled(cron = "0 0 6,12,18 * * ?")
     //https://www.cnblogs.com/dubhlinn/p/10740838.html
     public void updateChinaTotalToDB() throws IOException, ParseException {
         HttpUtils httpUtils = new HttpUtils();
@@ -82,6 +83,13 @@ public class ChinaTotalScheduleTask {
 
         //插入数据库
         chinaTotalService.save(dataEntity);
+
+        // 删除缓存！ MySQL --- redis
+        Jedis jedis = new Jedis("127.0.0.1");
+        if (jedis!=null) {
+            jedis.flushDB();
+        }
+
 
         // 中国各个省份数据实时刷新
         JSONArray areaTree = jsonObjectData.getJSONArray("areaTree");
