@@ -17,10 +17,15 @@
     <form action="" method="post" id="searchFrm2" lay-filter="searchFrm2" class="layui-form">
         <div class="layui-form-item">
             <div class="layui-inline">
+                <label class="layui-form-label">id</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="id" lay-verify="required" class="layui-input input-radius" disabled placeholder="id">
+                </div>
+            </div>
+            <div class="layui-inline">
                 <label class="layui-form-label">班级名字</label>
                 <div class="layui-input-inline">
                     <input type="text" name="name" id = "chinaname" lay-verify="required" class="layui-input input-radius" placeholder="请输入标题">
-                    <input type="hidden" name="id">
                 </div>
             </div>
             <div class="layui-inline" style="padding-left: 10%">

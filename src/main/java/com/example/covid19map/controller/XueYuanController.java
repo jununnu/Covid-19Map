@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
@@ -22,22 +23,19 @@ import java.util.Date;
  * @date 2022/11/13 16:59
  * @description XueYuanController
  */
-@Controller
-@RequestMapping("/xueyuan")
+@RestController
 public class XueYuanController {
     @Autowired
     private XueYuanService xueYuanService;
 
-    @RequestMapping("/toXueYuan")
-    public String toXueYuan(){ return "xueyuan/xueyuan";}
+
 
     /**
      * 查询所有新闻
      * @param xueYuanVo
      * @return
      */
-    @RequestMapping("/listXueYuan")
-    @ResponseBody
+    @RequestMapping("/xueyuan/listXueYuan")
     public DataView listNews(XueYuanVo xueYuanVo){
         QueryWrapper<XueYuan> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(xueYuanVo.getName()), "title", xueYuanVo.getName());
@@ -46,8 +44,7 @@ public class XueYuanController {
         return new DataView(iPage.getTotal(), iPage.getRecords());
     }
 
-    @RequestMapping("/addOrUpdateXueYuan")
-    @ResponseBody
+    @RequestMapping("/xueyuan/addOrUpdateXueYuan")
     public DataView addOrUpdateNews(XueYuan xueYuan){
         xueYuanService.saveOrUpdate(xueYuan);
         DataView dataView = new DataView();
@@ -59,7 +56,7 @@ public class XueYuanController {
     /**
      * 删除新闻
      */
-    @RequestMapping("/deleteById")
+    @RequestMapping("/xueyuan/deleteById")
     public DataView deleteById(Integer id){
         xueYuanService.removeById(id);
         DataView dataView = new DataView();

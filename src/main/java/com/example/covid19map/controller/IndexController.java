@@ -1,5 +1,6 @@
 package com.example.covid19map.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.covid19map.entity.*;
 import com.example.covid19map.service.ChinaTotalService;
 import com.example.covid19map.service.GlobalService;
@@ -34,6 +35,7 @@ public class IndexController {
     @Autowired
     private NocvNewsService nocvNewsService;
 
+
     @RequestMapping("/toChina")
     public String toChina(Model model) throws ParseException {
         //第一版
@@ -66,10 +68,10 @@ public class IndexController {
             String updateTime = jedis.get("updateTime");
             // 缓存里面有数据
             if (StringUtils.isNotBlank(confirm)
-                && StringUtils.isNotBlank(input)
-                && StringUtils.isNotBlank(heal)
-                && StringUtils.isNotBlank(dead)
-                && StringUtils.isNotBlank(updateTime)
+                    && StringUtils.isNotBlank(input)
+                    && StringUtils.isNotBlank(heal)
+                    && StringUtils.isNotBlank(dead)
+                    && StringUtils.isNotBlank(updateTime)
             ){
                 ChinaTotal chinaTotalRedis = new ChinaTotal();
                 chinaTotalRedis.setConfirm(Integer.parseInt(confirm));
@@ -119,11 +121,10 @@ public class IndexController {
         model.addAttribute("chinaTotal", chinaTotal);
         return "index";
     }
-//    @RequestMapping("/index")
+    //    @RequestMapping("/index")
 //    public String index(){
 //        return "index";
 //    }
-
     @RequestMapping("/query")
     @ResponseBody
     public List<NocvData> queryData() throws ParseException {
@@ -135,7 +136,42 @@ public class IndexController {
 //        queryWrapper.ge("update_time", format.parse(format1));
 //        List<NocvData> nocvData = indexService.list(queryWrapper);
 
+
+        // 先查redis缓存，有数据就返回
+        Jedis jedis = new Jedis("127.0.0.1");
+        if (jedis!=null) {
+            // 34个省份
+            List<String> listRedis = jedis.lrange("nocvdata", 0, 33);
+
+            List<NocvData> dataList = new ArrayList<>();
+
+            if (listRedis.size()>0) {
+                for (int i=0; i<listRedis.size(); i++){
+//                    System.out.println("列表项为："+listRedis.get(i));
+                    String s = listRedis.get(i);
+                    JSONObject jsonObject = JSONObject.parseObject(s);
+                    Object name = jsonObject.get("name");
+                    Object value = jsonObject.get("value");
+                    NocvData nocvData = new NocvData();
+                    nocvData.setName(String.valueOf(name));
+                    nocvData.setValue(Integer.parseInt(value.toString()));
+                    dataList.add(nocvData);
+                }
+                // 返回redis数据
+                return dataList;
+            }else{
+                // redis没有数据，查MySQL数据库，更新缓存
+                List<NocvData> list = indexService.listOrderByIdLimit34();
+                for (NocvData nocvData : list) {
+                    jedis.lpush("nocvdata", JSONObject.toJSONString(nocvData));
+                }
+                // 查询MySQL数据
+                return list;
+            }
+        }
+
         List<NocvData> nocvData = indexService.listOrderByIdLimit34();
+        // 默认没有链接redis的返回
         return nocvData;
     }
 

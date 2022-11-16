@@ -15,9 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.crypto.Data;
@@ -28,8 +26,8 @@ import java.util.*;
  * @date 2022/11/2 17:18
  * @description MenuController
  */
-@Controller
-@RequestMapping("/menu")
+@RestController
+//@RequestMapping("/menu")
 public class MenuController {
 
     @Autowired
@@ -38,14 +36,10 @@ public class MenuController {
     @Autowired
     private RoleService roleService;
 
-    @RequestMapping("/toMenu")
-    private String toMenu(){
-        return "/menu/menu";
-    }
+
 
     // 加载所有的菜单
-    @RequestMapping("/loadAllMenu")
-    @ResponseBody
+    @GetMapping("/menu/loadAllMenu")
     public DataView loadAllMenu(MenuVo menuVo){
         IPage<Menu> page = new Page<>(menuVo.getPage(), menuVo.getLimit());
         QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
@@ -56,8 +50,7 @@ public class MenuController {
     }
 
     // 加载下来菜单数据和左侧dtree
-    @RequestMapping("/loadMenuManagerLeftTreeJson")
-    @ResponseBody
+    @RequestMapping("/menu/loadMenuManagerLeftTreeJson")
     public DataView loadMenuManagerLeftTreeJson(){
         List<Menu> list = menuService.list();
         List<TreeNode> treeNodes = new ArrayList<>();
@@ -69,8 +62,7 @@ public class MenuController {
     }
 
     // 赋值最大的排序吗+1; 条件查询：倒序排序，只取一条数据再加1
-    @RequestMapping("/loadMenuMaxOrderNum")
-    @ResponseBody
+    @RequestMapping("/menu/loadMenuMaxOrderNum")
     public Map<String, Object> loadMenuMaxOrderNum(){
         Map<String, Object> map = new HashMap<>();
         QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
@@ -83,8 +75,7 @@ public class MenuController {
     }
 
     // 新增菜单
-    @RequestMapping("/addMenu")
-    @ResponseBody
+    @RequestMapping("/menu/addMenu")
     public DataView addMenu(Menu menu){
         DataView dataView = new DataView();
         menu.setType("menu");
@@ -100,8 +91,7 @@ public class MenuController {
     }
 
     // 更新菜单
-    @RequestMapping("/updateMenu")
-    @ResponseBody
+    @RequestMapping("/menu/updateMenu")
     public DataView updateMenu(Menu menu){
         menuService.updateById(menu);
         DataView dataView = new DataView();
@@ -111,8 +101,7 @@ public class MenuController {
     }
 
     // 删除信息前提，判断有没有子节点
-    @RequestMapping("/checkMenuHasChildrenNode")
-    @ResponseBody
+    @RequestMapping("/menu/checkMenuHasChildrenNode")
     public Map<String, Object> checkChildrenNode(Menu menu){
         Map<String, Object> map = new HashMap<>();
         QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
@@ -127,8 +116,7 @@ public class MenuController {
     }
 
     // 删除信息
-    @RequestMapping("/deleteMenu")
-    @ResponseBody
+    @RequestMapping("/menu/deleteMenu")
     public DataView deleteMenu(Menu menu){
         menuService.removeById(menu.getId());
         DataView dataView = new DataView();
@@ -138,8 +126,7 @@ public class MenuController {
     }
 
     // 首页左侧层级展示
-    @RequestMapping("/loadIndexLeftMenuJson")
-    @ResponseBody
+    @RequestMapping("/menu/loadIndexLeftMenuJson")
     public DataView loadIndexLeftMenuJson(HttpSession session){
         // 查询所有菜单栏
         List<Menu> list = null;

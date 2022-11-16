@@ -13,24 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Jun
  * @date 2022/11/14 21:42
  * @description VaccineController
  */
-@Controller
-@RequestMapping("vaccine")
+@RestController
 public class VaccineController {
     @Autowired
     private VaccineService vaccineService;
 
-    @RequestMapping("/toVaccine")
-    public String toVaccine(){
-        return "vaccine/vaccine";
-    }
-
-    @RequestMapping("/loadAllVaccine")
+    @RequestMapping("/vaccine/loadAllVaccine")
     @ResponseBody
     public DataView loadAllVaccine(VaccineVo vaccineVo){
         IPage<Vaccine> page = new Page<>(vaccineVo.getPage(), vaccineVo.getLimit());
@@ -39,7 +34,7 @@ public class VaccineController {
         return new DataView(page.getTotal(), page.getRecords());
     }
 
-    @RequestMapping("/addVaccine")
+    @RequestMapping("/vaccine/addVaccine")
     @ResponseBody
     public DataView addVaccine(Vaccine vaccine){
         vaccineService.save(vaccine);
@@ -49,7 +44,7 @@ public class VaccineController {
         return dataView;
     }
 
-    @RequestMapping("/updateVaccine")
+    @RequestMapping("/vaccine/updateVaccine")
     @ResponseBody
     public DataView updateVaccine(Vaccine vaccine){
         vaccineService.updateById(vaccine);
@@ -59,7 +54,7 @@ public class VaccineController {
         return dataView;
     }
 
-    @RequestMapping("/deleteVaccine")
+    @RequestMapping("/vaccine/deleteVaccine")
     @ResponseBody
     public DataView deleteVaccine(Integer id){
         vaccineService.removeById(id);

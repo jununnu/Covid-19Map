@@ -17,10 +17,15 @@
     <form action="" method="post" id="searchFrm2" lay-filter="searchFrm2" class="layui-form">
         <div class="layui-form-item">
             <div class="layui-inline">
+                <label class="layui-form-label">id</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="id" class="layui-input input-radius" disabled placeholder="id">
+                </div>
+            </div>
+            <div class="layui-inline">
                 <label class="layui-form-label">标题</label>
                 <div class="layui-input-inline">
                     <input type="text" name="title" id = "chinaname" lay-verify="required" class="layui-input input-radius" placeholder="请输入标题">
-                    <input type="hidden" name="id">
                 </div>
             </div>
             <div class="layui-inline">
@@ -208,8 +213,10 @@
 
         // 新增数据请求
         form.on("submit(doAdd)",function (data) {
+            console.log(data)
             $.post("/news/addOrUpdateNews",data.field,function (res) {
                 if (res.code == 200){
+                    $("#searchFrm2")[0].reset();
                     tableIns.reload();
                 }
                 layer.msg(res.msg);
@@ -226,8 +233,9 @@
                 type: 1,
                 skin: 'layui-layer-rim', //加上边框
                 content: $("#addOrUpdateDiv"),
-                area: ['400px', '250px'],
+                area: ['400px', '300px'],
                 success:function () {
+                    console.log(data)
                     $("#searchFrm2")[0].reset();
                     form.val("searchFrm2",data);
                 }

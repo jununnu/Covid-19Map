@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.xml.crypto.Data;
 import java.util.ArrayList;
@@ -26,8 +27,7 @@ import java.util.List;
  * @date 2022/11/6 17:09
  * @description RoleController
  */
-@Controller
-@RequestMapping("/role")
+@RestController
 public class RoleController {
     @Autowired
     private RoleService roleService;
@@ -35,14 +35,10 @@ public class RoleController {
     @Autowired
     private MenuService menuService;
 
-    @RequestMapping("/toRole")
-    public String toRole(){
-        return "role/role";
-    }
+
 
     // 查询所有角色带分页，带有查询条件
-    @RequestMapping("/loadAllRole")
-    @ResponseBody
+    @RequestMapping("/role/loadAllRole")
     public DataView loadAllRole(RoleVo roleVo){
         IPage<Role> page = new Page<>(roleVo.getPage(), roleVo.getLimit());
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
@@ -54,8 +50,7 @@ public class RoleController {
     }
 
     // 添加角色
-    @RequestMapping("/addRole")
-    @ResponseBody
+    @RequestMapping("/role/addRole")
     public DataView addRole(Role role){
         roleService.save(role);
         DataView dataView = new DataView();
@@ -65,8 +60,7 @@ public class RoleController {
 }
 
     // 删除角色
-    @RequestMapping("/deleteRole")
-    @ResponseBody
+    @RequestMapping("/role/deleteRole")
     public DataView deleteRole(Role role){
         roleService.removeById(role.getId());
         DataView dataView = new DataView();
@@ -76,8 +70,7 @@ public class RoleController {
     }
 
     // 修改角色
-    @RequestMapping("/updateRole")
-    @ResponseBody
+    @RequestMapping("/role/updateRole")
     public DataView updateRole(Role role){
         roleService.saveOrUpdate(role);
 //        roleService.save(role);
@@ -88,8 +81,7 @@ public class RoleController {
     }
 
     // 初始化下拉列表权限
-    @RequestMapping("/initPermissionByRoleId")
-    @ResponseBody
+    @RequestMapping("/role/initPermissionByRoleId")
     public DataView initPermissionByRoleId(Integer roleId){
         // 查找所有菜单权限
         QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
@@ -123,8 +115,7 @@ public class RoleController {
 
     // 确认分配权限，插入数据库role_menu
     // var params = rid+data.id
-    @RequestMapping("/saveRolePermission")
-    @ResponseBody
+    @RequestMapping("/role/saveRolePermission")
     public DataView saveRolePermission(Integer rid, Integer[] mids){
         // 删除rid之前的mid权限
         roleService.deleteRoleByRid(rid);

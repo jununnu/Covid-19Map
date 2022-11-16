@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -27,8 +28,7 @@ import java.util.Map;
  * @date 2022/11/10 13:44
  * @description UserController
  */
-@Controller
-@RequestMapping("/user")
+@RestController
 public class UserController {
 
     @Autowired
@@ -43,23 +43,8 @@ public class UserController {
     @Autowired
     private RoleService roleService;
 
-    @RequestMapping("/toUser")
-    public String toUser() {
-        return "user/user";
-    }
-
-    @RequestMapping("/toChangePassword")
-    public String toChangePassword() {
-        return "user/changepassword";
-    }
-
-    @RequestMapping("/toUserInfo")
-    public String toUserInfo() {
-        return "user/userInfo";
-    }
-
     // 分页查询所有数据
-    @RequestMapping("/loadAllUser")
+    @RequestMapping("/user/loadAllUser")
     @ResponseBody
     public DataView getAllUser(UserVo userVo) {
         // 第一种方法
@@ -100,7 +85,7 @@ public class UserController {
     /**
      * 新增用户
      */
-    @RequestMapping("/addUser")
+    @RequestMapping("/user/addUser")
     @ResponseBody
     public DataView addUser(User user) {
         userService.save(user);
@@ -114,7 +99,7 @@ public class UserController {
     /**
      * 修改用户
      */
-    @RequestMapping("/updateUser")
+    @RequestMapping("/user/updateUser")
     @ResponseBody
     public DataView updateUser(User user) {
         userService.updateById(user);
@@ -127,7 +112,7 @@ public class UserController {
     /**
      * 删除用户
      */
-    @RequestMapping("/deleteUser/{id}")
+    @RequestMapping("/user/deleteUser/{id}")
     @ResponseBody
     public DataView deleteUser(@PathVariable("id") Integer id) {
         userService.removeById(id);
@@ -140,7 +125,7 @@ public class UserController {
     /**
      * 初始化下拉班级列表
      */
-    @RequestMapping("/listAllBanJi")
+    @RequestMapping("/user/listAllBanJi")
     @ResponseBody
     public List<BanJi> listAllBanJi() {
         List<BanJi> list = banJiService.list();
@@ -150,7 +135,7 @@ public class UserController {
     /**
      * 初始化学院下拉列表
      */
-    @RequestMapping("/listAllXueYuan")
+    @RequestMapping("/user/listAllXueYuan")
     @ResponseBody
     public List<XueYuan> listAllXueYuan() {
         List<XueYuan> list = xueYuanService.list();
@@ -161,7 +146,7 @@ public class UserController {
     /**
      * 删除用户
      */
-    @RequestMapping("/resetPwd/{id}")
+    @RequestMapping("/user/resetPwd/{id}")
     @ResponseBody
     public DataView resetPwd(@PathVariable("id") Integer id) {
         User user = new User();
@@ -177,7 +162,7 @@ public class UserController {
     /**
      * 点击分配时，初始化用户角色
      */
-    @RequestMapping("/initRoleByUserId")
+    @RequestMapping("/user/initRoleByUserId")
     @ResponseBody
     public DataView initRoleByUserId(Integer id){
         // 查询角色
@@ -202,7 +187,7 @@ public class UserController {
     /**
      * 保存角色分配权限,1:m
      */
-    @RequestMapping("/saveUserRole")
+    @RequestMapping("/user/saveUserRole")
     @ResponseBody
     public DataView saveUserRole(Integer uid, Integer[] ids){
         userService.saveUserRole(uid, ids);

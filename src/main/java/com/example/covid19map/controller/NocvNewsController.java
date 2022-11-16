@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
@@ -20,24 +21,17 @@ import java.util.Date;
  * @date 2022/11/13 15:54
  * @description NocvNewsController
  */
-@Controller
-@RequestMapping("/news")
+@RestController
 public class NocvNewsController {
     @Autowired
     private NocvNewsService nocvNewsService;
-
-    @RequestMapping("/toNews")
-    public String toNews(){
-        return "news/news";
-    }
 
     /**
      * 查询所有新闻
      * @param nocvNewsVo
      * @return
      */
-    @RequestMapping("/listNews")
-    @ResponseBody
+    @RequestMapping("/news/listNews")
     public DataView listNews(NocvNewsVo nocvNewsVo){
         QueryWrapper<NocvNews> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(nocvNewsVo.getTitle()), "title", nocvNewsVo.getTitle());
@@ -46,8 +40,7 @@ public class NocvNewsController {
         return new DataView(iPage.getTotal(), iPage.getRecords());
     }
 
-    @RequestMapping("/addOrUpdateNews")
-    @ResponseBody
+    @RequestMapping("/news/addOrUpdateNews")
     public DataView addOrUpdateNews(NocvNews nocvNews){
         nocvNews.setCreateTime(new Date());
         nocvNewsService.saveOrUpdate(nocvNews);
@@ -60,7 +53,7 @@ public class NocvNewsController {
     /**
      * 删除新闻
      */
-    @RequestMapping("/deleteById")
+    @RequestMapping("/news/deleteById")
     public DataView deleteById(Integer id){
         nocvNewsService.removeById(id);
         DataView dataView = new DataView();

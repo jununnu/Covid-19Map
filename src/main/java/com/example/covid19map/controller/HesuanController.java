@@ -9,27 +9,21 @@ import com.example.covid19map.vo.DataView;
 import com.example.covid19map.vo.HeSuanVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Jun
  * @date 2022/11/14 20:29
  * @description HesuanController
  */
-@Controller
-@RequestMapping("/hesuan")
+@RestController
 public class HesuanController {
 
     @Autowired
     private HeSuanService heSuanService;
-    @RequestMapping("/toHeSuan")
-    public String toHesuan(){
-        return "hesuan/hesuan";
-    }
 
-    @RequestMapping("/loadAllHeSuan")
-    @ResponseBody
+
+    @GetMapping("/hesuan/loadAllHeSuan")
     public DataView loadAllHeSuan(HeSuanVo heSuanVo){
         IPage<HeSuan> page = new Page<>(heSuanVo.getPage(), heSuanVo.getLimit());
         QueryWrapper<HeSuan> queryWrapper = new QueryWrapper<>();
@@ -37,8 +31,7 @@ public class HesuanController {
         return new DataView(page.getTotal(), page.getRecords());
     }
 
-    @RequestMapping("/addHeSuan")
-    @ResponseBody
+    @PostMapping("/hesuan/addHeSuan")
     public DataView addHeSuan(HeSuan heSuan){
         heSuanService.save(heSuan);
         DataView dataView = new DataView();
@@ -47,8 +40,7 @@ public class HesuanController {
         return dataView;
     }
 
-    @RequestMapping("/updateHeSuan")
-    @ResponseBody
+    @PostMapping("/hesuan/updateHeSuan")
     public DataView updateHeSuan(HeSuan heSuan){
         heSuanService.updateById(heSuan);
         DataView dataView = new DataView();
@@ -57,8 +49,7 @@ public class HesuanController {
         return dataView;
     }
 
-    @RequestMapping("/deleteHeSuan")
-    @ResponseBody
+    @DeleteMapping("/hesuan/deleteHeSuan")
     public DataView deleteHeSuan(Integer id){
         heSuanService.removeById(id);
         DataView dataView = new DataView();

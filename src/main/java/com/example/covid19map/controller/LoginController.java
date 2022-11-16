@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -24,18 +25,11 @@ import java.io.IOException;
  * @date 2022/11/1 12:57
  * @description LoginController
  */
-@Controller
+@RestController
 public class LoginController {
 
     @Autowired
     private UserService userService;
-
-
-
-    @RequestMapping("/toLogin")
-    public String toLogin(){
-        return "login";
-    }
 
     // 验证码逻辑
     @RequestMapping("/login/getCode")
@@ -53,7 +47,6 @@ public class LoginController {
 
     // 登陆逻辑
     @RequestMapping("/login/login")
-    @ResponseBody
     public DataView login(String username, String password, String code, HttpSession session){
         DataView dataView = new DataView();
         // 首先判断验证码

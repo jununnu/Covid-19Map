@@ -8,34 +8,27 @@ import com.example.covid19map.service.BanJiService;
 import com.example.covid19map.vo.BanJiVo;
 import com.example.covid19map.vo.DataView;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Jun
  * @date 2022/11/13 17:24
  * @description BanJiController
  */
-@Controller
-@RequestMapping("/banji")
+@RestController
 public class BanJiController {
     @Autowired
     private BanJiService banJiService;
-
-    @RequestMapping("/toBanJi")
-    public String toBanji(){
-        return "banji/banji";
-    }
 
     /**
      * 查询所有新闻
      * @param banJiVo
      * @return
      */
-    @RequestMapping("/listBanJi")
-    @ResponseBody
+    @GetMapping("/banji/listBanJi")
     public DataView listBanJi(BanJiVo banJiVo){
         QueryWrapper<BanJi> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(banJiVo.getName()), "title", banJiVo.getName());
@@ -44,8 +37,7 @@ public class BanJiController {
         return new DataView(iPage.getTotal(), iPage.getRecords());
     }
 
-    @RequestMapping("/addOrUpdateBanJi")
-    @ResponseBody
+    @PostMapping("/banji/addOrUpdateBanJi")
     public DataView addOrUpdateBanJi(BanJi banJi){
         banJiService.saveOrUpdate(banJi);
         DataView dataView = new DataView();
@@ -57,8 +49,8 @@ public class BanJiController {
     /**
      * 删除新闻
      */
-    @RequestMapping("/deleteById")
-    public DataView deleteById(Integer id){
+    @DeleteMapping("/banji/deleteById/{id}")
+    public DataView deleteById(@PathVariable("id") Integer id){
         banJiService.removeById(id);
         DataView dataView = new DataView();
         dataView.setCode(200);

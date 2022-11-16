@@ -9,30 +9,21 @@ import com.example.covid19map.vo.DataView;
 import com.example.covid19map.vo.HealthClockVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Jun
  * @date 2022/10/26 18:51
  * @description HealthClockController
  */
-@Controller
+@RestController
 public class HealthClockController {
 
     @Autowired
     private HealthClockService healthClockService;
 
-    //跳转页面
-    @RequestMapping("/toHealthClock")
-    public String toHealthClock(){
-        return "admin/healthClock";
-    }
-
-
     //查询所有打卡记录，带有模糊查和分页
-    @RequestMapping("/listHealthClock")
-    @ResponseBody
+    @GetMapping("/listHealthClock")
     public DataView listHealthClock(HealthClockVo healthClockVo){
         IPage<HealthClock> page = new Page<>(healthClockVo.getPage(), healthClockVo.getLimit());
         QueryWrapper<HealthClock> queryWrapper = new QueryWrapper<>();
@@ -43,8 +34,7 @@ public class HealthClockController {
     }
 
     //添加健康打卡数据,有id修改，没id新增
-    @RequestMapping("/addHealthClock")
-    @ResponseBody
+    @PostMapping("/addHealthClock")
     public DataView addHealth(HealthClock healthClock){
         boolean b = healthClockService.saveOrUpdate(healthClock);
         DataView dataView = new DataView();
@@ -58,8 +48,7 @@ public class HealthClockController {
         return dataView;
     }
 
-    @RequestMapping("/deleteHealthClockById")
-    @ResponseBody
+    @DeleteMapping("/deleteHealthClockById")
     public DataView deleteHealth(HealthClock healthClock){
         boolean remove = healthClockService.removeById(healthClock.getId());
         DataView dataView = new DataView();
