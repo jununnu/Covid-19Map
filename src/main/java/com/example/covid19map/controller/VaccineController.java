@@ -26,7 +26,6 @@ public class VaccineController {
     private VaccineService vaccineService;
 
     @RequestMapping("/vaccine/loadAllVaccine")
-    @ResponseBody
     public DataView loadAllVaccine(VaccineVo vaccineVo){
         IPage<Vaccine> page = new Page<>(vaccineVo.getPage(), vaccineVo.getLimit());
         QueryWrapper<Vaccine> queryWrapper = new QueryWrapper<>();
@@ -35,7 +34,6 @@ public class VaccineController {
     }
 
     @RequestMapping("/vaccine/addVaccine")
-    @ResponseBody
     public DataView addVaccine(Vaccine vaccine){
         vaccineService.save(vaccine);
         DataView dataView = new DataView();
@@ -45,7 +43,6 @@ public class VaccineController {
     }
 
     @RequestMapping("/vaccine/updateVaccine")
-    @ResponseBody
     public DataView updateVaccine(Vaccine vaccine){
         vaccineService.updateById(vaccine);
         DataView dataView = new DataView();
@@ -55,7 +52,6 @@ public class VaccineController {
     }
 
     @RequestMapping("/vaccine/deleteVaccine")
-    @ResponseBody
     public DataView deleteVaccine(Integer id){
         vaccineService.removeById(id);
         DataView dataView = new DataView();

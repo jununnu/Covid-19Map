@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 public class ApiController {
 
-    @RequestMapping("/toBanJi")
+    @RequestMapping("banji/toBanJi")
     public String toBanji(){
         return "banji/banji";
     }
@@ -32,7 +32,7 @@ public class ApiController {
         return "admin/healthClock";
     }
 
-    @RequestMapping("/toHeSuan")
+    @RequestMapping("hesuan/toHeSuan")
     public String toHesuan(){
         return "hesuan/hesuan";
     }
@@ -42,20 +42,20 @@ public class ApiController {
         return "login";
     }
 
-    @RequestMapping("/toMenu")
+    @RequestMapping("menu/toMenu")
     private String toMenu(){
         return "/menu/menu";
     }
 
-    @RequestMapping("/toNews")
+    @RequestMapping("news/toNews")
     public String toNews(){
         return "news/news";
     }
 
-    @RequestMapping("/toRole")
+    @RequestMapping("role/toRole")
     public String toRole(){ return "role/role";}
 
-    @RequestMapping("/toUser")
+    @RequestMapping("user/toUser")
     public String toUser() {
         return "user/user";
     }
@@ -70,11 +70,11 @@ public class ApiController {
         return "user/userInfo";
     }
 
-    @RequestMapping("/toVaccine")
+    @RequestMapping("vaccine/toVaccine")
     public String toVaccine(){
         return "vaccine/vaccine";
     }
 
-    @RequestMapping("/toXueYuan")
+    @RequestMapping("xueyuan/toXueYuan")
     public String toXueYuan(){ return "xueyuan/xueyuan";}
 }

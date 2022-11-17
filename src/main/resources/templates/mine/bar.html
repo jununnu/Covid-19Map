@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <script src="/echarts/china.js"></script>
+    <script src="/echarts/jquery-1.11.1.min.js"></script>
+
+    <!-- 引入 layui.css -->
+    <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+    <!-- 引入 layui.js -->
+    <script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+
+</head>
+<body class="childrenBody">
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+        var dataList = [];
+
+        option = {
+            xAxis: {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: [120, 200, 150, 80, 70, 110, 130],
+                    type: 'bar'
+                }
+            ]
+        };
+
+        $.ajax({
+            url: "/queryBar",
+            dataType: "json",
+            success: function(data) {
+                myChart.setOption({
+                    xAxis: {
+                        type: 'category',
+                        data: data.cityList
+                    },
+                    series: [
+                        {
+                            data: data.noList,
+                            type: 'bar'
+                        }
+                    ]
+                })
+            }
+        });
+        myChart.setOption(option);
+    </script>
+</body>
+</html>

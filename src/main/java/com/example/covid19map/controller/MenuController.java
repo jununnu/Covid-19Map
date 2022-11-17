@@ -50,16 +50,16 @@ public class MenuController {
     }
 
     // 加载下来菜单数据和左侧dtree
-    @RequestMapping("/menu/loadMenuManagerLeftTreeJson")
-    public DataView loadMenuManagerLeftTreeJson(){
-        List<Menu> list = menuService.list();
-        List<TreeNode> treeNodes = new ArrayList<>();
-        for (Menu menu : list) {
-            Boolean open = menu.getOpen() == 1?true:false;
-            treeNodes.add(new TreeNode(menu.getId(), menu.getPid(), menu.getTitle(), open));
-        }
-        return new DataView(treeNodes);
-    }
+//    @RequestMapping("/menu/loadIndexLeftMenuJson")
+//    public DataView loadMenuManagerLeftTreeJson(){
+//        List<Menu> list = menuService.list();
+//        List<TreeNode> treeNodes = new ArrayList<>();
+//        for (Menu menu : list) {
+//            Boolean open = menu.getOpen() == 1?true:false;
+//            treeNodes.add(new TreeNode(menu.getId(), menu.getPid(), menu.getTitle(), open));
+//        }
+//        return new DataView(treeNodes);
+//    }
 
     // 赋值最大的排序吗+1; 条件查询：倒序排序，只取一条数据再加1
     @RequestMapping("/menu/loadMenuMaxOrderNum")
@@ -127,49 +127,18 @@ public class MenuController {
 
     // 首页左侧层级展示
     @RequestMapping("/menu/loadIndexLeftMenuJson")
-    public DataView loadIndexLeftMenuJson(HttpSession session){
-        // 查询所有菜单栏
-        List<Menu> list = null;
-        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
-
-        // 按照条件查询
-        User user = (User) session.getAttribute("user");
-        Integer userId = user.getId();
-
-        if (user.getUsername().equals("admin") || StringUtils.equals(user.getUsername(),"admin")) {
-            list = menuService.list();
-        } else {
-            // 根据用户id查询角色
-            List<Integer> currentUserRoleIds = roleService.queryUserRoleById(userId);
-
-            // 根据角色查询菜单权限
-            Set<Integer> mids = new HashSet<>();
-            for (Integer rid : currentUserRoleIds) {
-                // 根据角色id查询菜单id
-                List<Integer> permissionIds = roleService.queryAllPermissionByRid(rid);
-                // 菜单栏id和角色id去重
-                mids.addAll(permissionIds);
-            }
-
-            // 根据角色id查询菜单
-            if (mids.size()>0) {
-                queryWrapper.in("id", mids);
-                list = menuService.list(queryWrapper);
-            }
-        }
-
-        // 构造层级关系
+    public DataView loadIndexLeftMenuJson(Menu menu){
+        List<Menu> list = menuService.list();
         List<TreeNode> treeNodes = new ArrayList<>();
-        for (Menu menu1 : list) {
-            Integer id = menu1.getId();
-            Integer pid = menu1.getPid();
-            String title = menu1.getTitle();
-            String icon = menu1.getIcon();
-            String href = menu1.getHref();
-            Boolean open = menu1.getOpen().equals(1)?true:false;
+        for (Menu m : list) {
+            Integer id = m.getId();
+            Integer pid = m.getPid();
+            String title = m.getTitle();
+            String icon = m.getIcon();
+            String href = m.getHref();
+            boolean open = m.getOpen().equals(1) ? true : false;
             treeNodes.add(new TreeNode(id, pid, title, icon, href, open));
         }
-        // 构造层级关系, 原先构造的treeNodes是没有层级关系的，单纯是个数组，需要用build构造成层级关系
         List<TreeNode> nodeList = TreeNodeBuilder.build(treeNodes, 0);
         return new DataView(nodeList);
     }

@@ -17,16 +17,16 @@
     <form action="" method="post" id="searchFrm2" lay-filter="searchFrm2" class="layui-form">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">id</label>
+                <label class="layui-form-label">省份名称</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="id"  class="layui-input input-radius" disabled placeholder="id">
+                    <input type="text" name="name" id = "chinaname" lay-verify="required" class="layui-input input-radius" placeholder="请输入省份名称">
+                    <input type="hidden" name="id">
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">学院名字</label>
+                <label class="layui-form-label">确诊数量</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="name" id = "chinaname" lay-verify="required" class="layui-input input-radius" placeholder="请输入标题">
-                    <input type="hidden" name="id" >
+                    <input type="text" name="value" id = "chinavalue" lay-verify="required" class="layui-input input-radius" placeholder="请输入确诊数量">
                 </div>
             </div>
             <div class="layui-inline" style="padding-left: 10%">
@@ -41,8 +41,9 @@
     </form>
 </div>
 
-
-<div>
+<!--layui公共模块-->
+<div th:include="commonmenu :: menu"></div>
+<div class="layui-body">
 
 
     <!-- 内容主体区域 -->
@@ -54,9 +55,9 @@
     <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">院系名字</label>
+                <label class="layui-form-label">省份名称</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="name" class="layui-input input-radius" placeholder="请输入标题名称">
+                    <input type="text" name="name" class="layui-input input-radius" placeholder="请输入省份名称">
                 </div>
             </div>
             <div class="layui-inline" style="padding-left: 3%">
@@ -67,10 +68,23 @@
                         class="layui-icon layui-icon-refresh"></i><span>重置</span>
                 </button>
 
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-radius" lay-submit="" lay-filter="doOutPortExcel">
+                    <i class="layui-icon layui-icon-normal">&#xe654;</i>导出Excel疫情数据
+                </button>
+
             </div>
         </div>
     </form>
 
+    <!--    文件上传的DIV-->
+    <div class="layui-upload-drag" id="test10">
+        <i class="layui-icon"></i>
+        <p>点击上传，或将文件拖拽到此处</p>
+        <div class="layui-hide" id="uploadDemoView">
+            <hr>
+            <img src="" alt="上传成功后渲染" style="max-width: 196px">
+        </div>
+    </div>
 
     <!-- table -->
     <div style="padding: 15px;">
@@ -119,12 +133,23 @@
             });
         });
 
+        //拖拽上传
+        upload.render({
+            elem: '#test10'
+            ,url: '/excelImportChina'
+            ,accept: 'file' //普通文件
+            ,done: function(res){
+                layer.msg(res.msg);
+            }
+        });
+
+
 
         //执行一个 table 实例
         tableIns = table.render({
             elem: '#demo'
             ,height: 420
-            ,url: '/xueyuan/listXueYuan' //数据接口
+            ,url: '/listDataByPage' //数据接口
             ,title: '用户表'
             ,page: true //开启分页
             ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
@@ -132,7 +157,8 @@
             ,cols: [ [ //表头
                 {type: 'checkbox', fixed: 'left'}
                 ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
-                ,{field: 'name', title: '院系名称', width:150}
+                ,{field: 'name', title: '省份名称', width:150}
+                ,{field: 'value', title: '确诊人数', width:150, sort: true}
                 ,{fixed: 'right', width: 200, align:'center', toolbar: '#barDemo'}
             ] ]
         });
@@ -170,7 +196,7 @@
                 layer.confirm('真的删除行么', function(index){
                     obj.del(); //删除对应行（tr）的DOM结构
                     //向服务端发送删除指令
-                    $.post("/xueyuan/deleteById",{id: obj.data.id},function (res) {
+                    $.post("/china/deleteById",{id: obj.data.id},function (res) {
                         if (res.code == 200){
                             tableIns.reload({
                                 where:"",
@@ -197,13 +223,14 @@
 
         // 新增数据请求
         form.on("submit(doAdd)",function (data) {
-            $.post("/xueyuan/addOrUpdateXueYuan",data.field,function (res) {
+            $.post("/china/addOrUpdateChina",data.field,function (res) {
                 if (res.code == 200){
                     tableIns.reload();
                 }
                 layer.msg(res.msg);
                 layer.close(mainIndex);
             });
+
             return false;
         });
 
@@ -221,6 +248,11 @@
                 }
             });
         }
+
+        // 导出Excel数据
+        form.on("submit(doOutPortExcel)",function () {
+            window.location.href = "/excelOutPortChina";
+        })
 
 
         //分页

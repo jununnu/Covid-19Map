@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @author Jun
@@ -31,5 +32,6 @@ public class Vaccine {
 
     private String danwei;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 }

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+
+  <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+  <script src="/echarts/world.js"></script>
+  <script src="/echarts/china.js"></script>
+  <script src="/echarts/jquery-1.11.1.min.js"></script>
+
+  <!-- 引入 layui.css -->
+  <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+  <!-- 引入 layui.js -->
+  <script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+
+</head>
+<body class="childrenBody">
+<div id="main" style="width: 900px;height:700px;">
+<script type="text/javascript">
+  var myChart = echarts.init(document.getElementById('main'));
+  var dataList = [];
+
+  option = {
+    title: {
+      text: '新型冠状病毒肺炎疫情地图',
+      subtext: '累计确诊人数（截止至北京时间2020-06-09 08:30）',
+      left: 'center',
+      top: 'top'
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: function(params) {
+        var value = params.value + '';
+        return params.seriesName + '<br/>' + params.name + ' : ' + value+'人';
+      }
+    },
+    toolbox: {
+      show: true,
+      orient: 'vertical',
+      left: 'right',
+      top: 'center',
+      feature: {
+        dataView: {
+          readOnly: false
+        },
+        restore: {},
+        saveAsImage: {}
+      }
+    },
+    visualMap: {
+      min: 0,
+      max: 2200000,
+      text: ['High', 'Low'],
+      realtime: false,
+      calculable: true,
+      color: ['orangered', 'yellow', 'lightskyblue']
+    }
+  };
+
+  $.ajax({
+    url: "/queryGlobal",
+    dataType: "json",
+    success: function(data) {
+      for (let i in data){
+        dataList[i] = data[i];
+      }
+      myChart.setOption({
+        series: [{
+          name: '新型冠状病毒肺炎疫情地图',
+          type: 'map',
+          mapType: 'world',
+          roam: true,
+          itemStyle: {
+            emphasis: {
+              label: {
+                show: true
+              }
+            }
+          },
+          data: dataList
+        }]
+      })
+    }
+  });
+  myChart.setOption(option);
+</script>
+</div>
+</body>
+</html>

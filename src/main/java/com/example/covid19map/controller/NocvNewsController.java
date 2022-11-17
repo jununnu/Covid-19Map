@@ -32,6 +32,7 @@ public class NocvNewsController {
      * @return
      */
     @RequestMapping("/news/listNews")
+    @ResponseBody
     public DataView listNews(NocvNewsVo nocvNewsVo){
         QueryWrapper<NocvNews> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(nocvNewsVo.getTitle()), "title", nocvNewsVo.getTitle());
