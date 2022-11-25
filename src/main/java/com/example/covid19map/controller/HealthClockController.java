@@ -48,7 +48,7 @@ public class HealthClockController {
         return dataView;
     }
 
-    @DeleteMapping("/deleteHealthClockById")
+    @PostMapping("/deleteHealthClockById")
     public DataView deleteHealth(HealthClock healthClock){
         boolean remove = healthClockService.removeById(healthClock.getId());
         DataView dataView = new DataView();

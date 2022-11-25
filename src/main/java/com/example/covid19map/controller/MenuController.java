@@ -50,16 +50,16 @@ public class MenuController {
     }
 
     // 加载下来菜单数据和左侧dtree
-//    @RequestMapping("/menu/loadIndexLeftMenuJson")
-//    public DataView loadMenuManagerLeftTreeJson(){
-//        List<Menu> list = menuService.list();
-//        List<TreeNode> treeNodes = new ArrayList<>();
-//        for (Menu menu : list) {
-//            Boolean open = menu.getOpen() == 1?true:false;
-//            treeNodes.add(new TreeNode(menu.getId(), menu.getPid(), menu.getTitle(), open));
-//        }
-//        return new DataView(treeNodes);
-//    }
+    @RequestMapping("/menu/loadMenuManagerLeftTreeJson")
+    public DataView loadMenuManagerLeftTreeJson(){
+        List<Menu> list = menuService.list();
+        List<TreeNode> treeNodes = new ArrayList<>();
+        for (Menu menu : list) {
+            Boolean open = menu.getOpen() == 1?true:false;
+            treeNodes.add(new TreeNode(menu.getId(), menu.getPid(), menu.getTitle(), open));
+        }
+        return new DataView(treeNodes);
+    }
 
     // 赋值最大的排序吗+1; 条件查询：倒序排序，只取一条数据再加1
     @RequestMapping("/menu/loadMenuMaxOrderNum")

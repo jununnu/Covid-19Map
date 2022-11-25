@@ -58,7 +58,8 @@ public class IndexController {
         // redis查询数据库逻辑
         // 查询redis缓存，有数据则直接返回；没有数据则查询MySQL数据库，更新缓存，返回客户端
 
-        Jedis jedis = new Jedis("127.0.0.1");
+        Jedis jedis = new Jedis("47.92.84.39", 6379);
+        jedis.auth("123456");
         // 拿到客户端链接
         if (jedis!=null) {
             String confirm = jedis.get("confirm");
@@ -138,7 +139,8 @@ public class IndexController {
 
 
         // 先查redis缓存，有数据就返回
-        Jedis jedis = new Jedis("127.0.0.1");
+        Jedis jedis = new Jedis("47.92.84.39", 6379);
+        jedis.auth("123456");
         if (jedis!=null) {
             // 34个省份
             List<String> listRedis = jedis.lrange("nocvdata", 0, 33);

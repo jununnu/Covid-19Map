@@ -1,30 +1,33 @@
 spring:
   datasource:
-    username: root
-    password: 1
-    url: jdbc:mysql://localhost:3306/nocv?useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8&allowPublicKeyRetrieval=false
+    url: jdbc:mysql://47.92.84.39:3307/nocv?useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8&allowPublicKeyRetrieval=false
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  mvc:
+    pathmatch:
+      # 配置策略
+      matching-strategy: ant-path-matcher
 # shiro配置
-#shiro:
-##  放行的路径
-#  anon-urls:
-#    - /toLogin*
-#    - /login.html*
-#    - /login/login
-#    - /login/getCode
-#    - /css/**
-#    - /echarts/**
-#    - /images/**
-#    - /layui/**
-#    - /layui_ext/**
-##  默认的登陆页面
-#  login-url: /index.html
-##  登出的地址
-#  log-out-url: /login/logout*
-##  拦截的路径
-#  authc-urls:
-#    - /**
+shiro:
+#  放行的路径
+  anon-urls:
+    - /toLogin*
+    - /login.html*
+    - /login/login
+    - /login/getCode
+    - /css/**
+    - /echarts/**
+    - /images/**
+    - /layui/**
+    - /layui_ext/**
+#  默认的登陆页面
+  login-url: /index.html
+#  登出的地址
+  log-out-url: /login/logout*
+#  拦截的路径
+  authc-urls:
+    - /**
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+

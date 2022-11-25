@@ -60,12 +60,12 @@ public class ApiController {
         return "user/user";
     }
 
-    @RequestMapping("/toChangePassword")
+    @RequestMapping("user/toChangePassword")
     public String toChangePassword() {
         return "user/changepassword";
     }
 
-    @RequestMapping("/toUserInfo")
+    @RequestMapping("user/toUserInfo")
     public String toUserInfo() {
         return "user/userInfo";
     }

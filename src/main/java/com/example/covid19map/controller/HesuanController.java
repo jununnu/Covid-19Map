@@ -49,7 +49,7 @@ public class HesuanController {
         return dataView;
     }
 
-    @DeleteMapping("/hesuan/deleteHeSuan")
+    @PostMapping("/hesuan/deleteHeSuan")
     public DataView deleteHeSuan(Integer id){
         heSuanService.removeById(id);
         DataView dataView = new DataView();

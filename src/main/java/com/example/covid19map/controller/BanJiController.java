@@ -7,6 +7,8 @@ import com.example.covid19map.entity.BanJi;
 import com.example.covid19map.service.BanJiService;
 import com.example.covid19map.vo.BanJiVo;
 import com.example.covid19map.vo.DataView;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @description BanJiController
  */
 @RestController
+//@Api("班级管理")
 public class BanJiController {
     @Autowired
     private BanJiService banJiService;
@@ -29,6 +32,7 @@ public class BanJiController {
      * @return
      */
     @GetMapping("/banji/listBanJi")
+//    @ApiOperation("班级分页")
     public DataView listBanJi(BanJiVo banJiVo){
         QueryWrapper<BanJi> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(banJiVo.getName()), "title", banJiVo.getName());
@@ -38,6 +42,7 @@ public class BanJiController {
     }
 
     @PostMapping("/banji/addOrUpdateBanJi")
+//    @ApiOperation("添加或更新班级")
     public DataView addOrUpdateBanJi(BanJi banJi){
         banJiService.saveOrUpdate(banJi);
         DataView dataView = new DataView();
@@ -50,6 +55,7 @@ public class BanJiController {
      * 删除新闻
      */
     @DeleteMapping("/banji/deleteById/{id}")
+//    @ApiOperation("删除班级")
     public DataView deleteById(@PathVariable("id") Integer id){
         banJiService.removeById(id);
         DataView dataView = new DataView();

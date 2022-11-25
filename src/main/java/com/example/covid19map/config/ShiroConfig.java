@@ -107,6 +107,8 @@ public class ShiroConfig {
         Map<String, Filter> filters=new HashMap<>();
         factoryBean.setFilters(filters);
         factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        //积木报表排除
+        filterChainDefinitionMap.put("/jmreport/**", "anon");
         return factoryBean;
     }
 
@@ -154,4 +156,6 @@ public class ShiroConfig {
     public ShiroDialect shiroDialect() {
         return new ShiroDialect();
     }
+
+
 }
